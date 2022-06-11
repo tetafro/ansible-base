@@ -18,8 +18,8 @@
   when: sensors
 
 - name: Configure hddtemp
-  copy:
-    src: files/hddtemp
+  template:
+    src: hddtemp.j2
     dest: /etc/default/hddtemp
     owner: root
     group: root
