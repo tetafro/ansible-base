@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# System Info
+
+release=`grep PRETTY_NAME /etc/os-release`
+kernel=`uname -sr`
+uptime=`uptime -p`
+read user last <<< $(last | grep -v "reboot" | head -n 1 | awk '{ print $1, $5, $6, $7 }')
+
+echo -e "System Info:
+  Distro:       ${release:13:-1}
+  Kernel:       $kernel
+  Uptime:       ${uptime:3}
+  Last Login:   $user on $last"
+
+# Resources
+
+read load1 load5 load15 <<< $(cat /proc/loadavg | awk '{ print $1, $2, $3 }')
+cpu_num=`grep -c '^processor' /proc/cpuinfo`
+read mem_used mem_total <<< $(free -h | grep '^Mem' | awk {'print $3, $2'})
+read swap_used swap_total <<< $(free -h | grep '^Swap' | awk {'print $3, $2'})
+read disk_used disk_total <<< $(df -h --output=used,size / | tail -n+2)
+
+echo -e "\nResources:
+  CPU Load:     $load1, $load5, $load15 for $cpu_num vCPUs
+  Memory Used:  $mem_used of $mem_total
+  Swap Used:    $swap_used of $swap_total
+  Disk Space:   $disk_used of $disk_total"
+
+{%- if sensors %}
+# Sensors
+
+cpu_temp_min=`sensors | grep '^Core' | tr '.+' ' ' | awk '{print $3}' | sort | head -1`
+cpu_temp_max=`sensors | grep '^Core' | tr '.+' ' ' | awk '{print $3}' | sort | tail -1`
+cpu_temp="$cpu_temp_min-$cpu_temp_max"
+if [[ $cpu_temp_min == $cpu_temp_max ]]; then
+    cpu_temp=$cpu_temp_max
+fi
+disk_temp=`nc localhost 7634 < /dev/null | cut -d '|' -f 4`
+echo -e "\nSensors:
+  CPU Cores:    $cpu_temp°C
+  Disk:         $disk_temp°C"
+
+# SMART
+
+smart=`smartctl -H /dev/sda | grep -o 'test result: .*'`
+echo -e "\nSMART:
+  ${smart^}"
+{% endif %}
+
+# Updates
+
+updates=`cat /var/lib/update-notifier/updates-available | grep -v '^$' | grep -v '^To see' | sed 's/\.$//'`
+echo -e "\nUpdates:
+  $updates"

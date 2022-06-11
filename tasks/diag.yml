@@ -1,0 +1,28 @@
+---
+- name: Install diagnostic and monitoring tools
+  apt:
+    state: present
+    name:
+      - update-notifier-common
+      - iftop
+      - iotop
+      - sysstat
+
+- name: Install hardware monitoring tools
+  apt:
+    state: present
+    name:
+      - lm-sensors
+      - hddtemp
+      - smartmontools
+  when: sensors
+
+- name: Configure hddtemp
+  copy:
+    src: files/hddtemp
+    dest: /etc/default/hddtemp
+    owner: root
+    group: root
+    mode: 0644
+  notify: [Restart hddtemp]
+  when: sensors

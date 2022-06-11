@@ -1,0 +1,27 @@
+---
+- name: Find default motd scripts
+  find:
+    paths: [/etc/update-motd.d]
+    file_type: any
+    excludes: [00-motd]
+  register: motd_default
+
+- name: Remove default motd scripts
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ motd_default['files'] }}"
+
+- name: Copy motd script
+  template:
+    src: motd.sh.j2
+    dest: /etc/update-motd.d/00-motd
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Setup cron to monitor available updates
+  file:
+    src: /usr/lib/update-notifier/update-motd-updates-available
+    dest: /etc/cron.hourly/motd
+    state: link

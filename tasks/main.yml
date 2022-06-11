@@ -9,3 +9,5 @@
 - include: sshd.yml
 - include: system.yml
 - include: tools.yml
+- include: diag.yml
+- include: motd.yml

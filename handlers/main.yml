@@ -16,3 +16,8 @@
 - name: Reload systemd daemon
   systemd:
     daemon_reload: true
+
+- name: Restart hddtemp
+  service:
+    name: hddtemp
+    state: restarted
