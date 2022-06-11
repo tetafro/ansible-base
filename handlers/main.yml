@@ -1,0 +1,18 @@
+---
+- name: Autoremove packages
+  apt:
+    autoremove: true
+
+- name: Restart journald
+  service:
+    name: systemd-journald
+    state: restarted
+
+- name: Reload sshd
+  service:
+    name: sshd
+    state: restarted
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: true

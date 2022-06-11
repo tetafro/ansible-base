@@ -1,0 +1,8 @@
+galaxy_info:
+  author: Denis Krivak
+  description: Some basic stuff
+  platforms:
+    - name: Ubuntu
+      version: '>=20.04'
+  min_ansible_version: '2.1'
+  license: MIT

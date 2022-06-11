@@ -1,0 +1,16 @@
+---
+- name: Update inputrc
+  copy:
+    src: files/inputrc
+    dest: /home/{{ ansible_user }}/.inputrc
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+
+- name: Update bash_aliases
+  copy:
+    src: files/bash_aliases
+    dest: /home/{{ ansible_user }}/.bash_aliases
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644

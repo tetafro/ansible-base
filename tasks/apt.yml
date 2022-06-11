@@ -1,0 +1,26 @@
+---
+- name: Update packages cache
+  apt:
+    update_cache: true
+
+- name: Install autoupdates tools
+  apt:
+    state: present
+    name: unattended-upgrades
+
+- name: Setup autoupdates
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    search_string: "{{ item.search_string }}"
+    line: "{{ item.line }}"
+  with_items:
+    - search_string: 'Unattended-Upgrade::Remove-Unused-Kernel-Packages '
+      line: 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";'
+    - search_string: 'Unattended-Upgrade::Remove-New-Unused-Dependencies '
+      line: 'Unattended-Upgrade::Remove-New-Unused-Dependencies "true";'
+    - search_string: 'Unattended-Upgrade::Remove-Unused-Dependencies '
+      line: 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
+    - search_string: 'Unattended-Upgrade::Automatic-Reboot '
+      line: 'Unattended-Upgrade::Automatic-Reboot "true";'
+    - search_string: 'Unattended-Upgrade::Automatic-Reboot-Time '
+      line: 'Unattended-Upgrade::Automatic-Reboot-Time "04:00";'

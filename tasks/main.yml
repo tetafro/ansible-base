@@ -1,0 +1,11 @@
+---
+- name: Check Linux distro
+  fail:
+    msg: OS is not Ubuntu
+  when: ansible_distribution != 'Ubuntu'
+
+- include: apt.yml
+- include: bash.yml
+- include: sshd.yml
+- include: system.yml
+- include: tools.yml

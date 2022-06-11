@@ -1,0 +1,11 @@
+---
+- name: Set timezone to Europe/Moscow
+  timezone:
+    name: Europe/Moscow
+
+- name: Reduce logs size limit
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: "#SystemMaxUse="
+    line: SystemMaxUse=100M
+  notify: [Restart journald]
