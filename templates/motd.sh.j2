@@ -28,7 +28,7 @@ echo -e "\nResources:
   Swap Used:    $swap_used of $swap_total
   Disk Space:   $disk_used of $disk_total"
 
-{%- if sensors %}
+{% if sensors -%}
 # Sensors
 
 cpu_temp_min=`sensors | grep '^Core' | tr '.+' ' ' | awk '{print $3}' | sort | head -1`
@@ -47,7 +47,7 @@ echo -e "\nSensors:
 smart=`smartctl -H /dev/sda | grep -o 'test result: .*'`
 echo -e "\nSMART:
   ${smart^}"
-{% endif %}
+{%- endif %}
 
 # Updates
 
