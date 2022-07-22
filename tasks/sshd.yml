@@ -6,7 +6,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: [Reload sshd]
+  notify: [Restart sshd]
 
 # Fix problem when sshd cannot start because network
 # interface is not yet up

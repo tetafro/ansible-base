@@ -8,7 +8,7 @@
     name: systemd-journald
     state: restarted
 
-- name: Reload sshd
+- name: Restart sshd
   service:
     name: sshd
     state: restarted
