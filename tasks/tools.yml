@@ -2,6 +2,7 @@
 - name: Remove garbage packages
   apt:
     state: absent
+    purge: true
     name:
       - cloud-init
       - snapd
